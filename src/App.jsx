@@ -1,7 +1,7 @@
 import { useState,useEffect } from 'react'
-import {Box,Stack,TextField,Button} from '@mui/material';
+import {Box,Stack,TextField,Button, Typography} from '@mui/material';
 import  { v4 as uuidv4 } from 'uuid';
-
+import Card from './components/Card/Card';
 import './App.css'
 
 function App() {
@@ -31,30 +31,57 @@ function App() {
     }
   };
 
+  const handleDelete = (idToDelete) => {
+    const newList = todoList.filter((item) => item.id !== idToDelete);
+    setTodoList(newList);
+  }
  return (
-  <Box>
+  <Box 
+    sx={{
+      width: '80%',
+      height: '50%',
+      p: 2,
+      border: '1px solid black',
+    }}>
+
+    <Typography variant='h2' component={'h2'}>
+      ToDo List
+    </Typography>
     <Stack>
       <TextField
         placeholder= 'add item...'
         multiline
+        autoFocus
         type='text'
         value={input}
         onChange= {(e) => setInput(e.target.value)}
         required
         sx={{
-            width: 500,
+            width: '100%',
             mb: 2
         }}
       />
       <Button
         variant='contained'
         onClick={handleAdd}
+        disabled={input.trim() === ''}
         sx={{
-          width: '70px'
+          width: '70px',
+          mb: 2,
         }}
       >
         Add
       </Button>
+
+      {todoList.length > 0 ? (
+        todoList.map((item) => (
+          <Card item={item} handleDelete={handleDelete}/>
+        ))
+      ) : (
+        <Typography variant='h2' component={'h2'}>
+          All Items Completed !!
+        </Typography>
+      )}
     </Stack>
   </Box>
  )
