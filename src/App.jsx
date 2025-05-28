@@ -4,9 +4,29 @@ import  { v4 as uuidv4 } from 'uuid';
 import Card from './components/Card/Card';
 import './App.css'
 
+const pageSize = 3;
+
+
 function App() {
  const [todoList, setTodoList] = useState([]);
  const [input,setInput] = useState('');
+ const [currPage,setCurrPage] = useState(1);
+ const totalPages = todoList.length ? Math.ceil(todoList.length/pageSize) : 1;
+ const startInx = (currPage-1) *pageSize;
+ const endInx = startInx + pageSize;
+ const currList = todoList.slice(startInx,endInx);
+
+ const handlePrev = () => {
+    if(currPage > 1) {
+      setCurrPage((prev)=>  prev-1);
+    }
+  };
+
+  const handleNext = () => {
+    if(currPage < totalPages) {
+      setCurrPage((prev)=> prev+1);
+    }
+  };
 
  useEffect(() => {
     localStorage.setItem('list', JSON.stringify(todoList));
@@ -39,9 +59,10 @@ function App() {
   <Box 
     sx={{
       width: '80%',
-      height: '50%',
+      height: 'max-content',
       p: 2,
       border: '1px solid black',
+      borderRadius: 2,  
     }}>
 
     <Typography variant='h2' component={'h2'}>
@@ -73,8 +94,8 @@ function App() {
         Add
       </Button>
 
-      {todoList.length > 0 ? (
-        todoList.map((item) => (
+      {currList.length > 0 ? (
+        currList.map((item) => (
           <Card item={item} handleDelete={handleDelete}/>
         ))
       ) : (
@@ -82,6 +103,29 @@ function App() {
           All Items Completed !!
         </Typography>
       )}
+
+      <Stack
+        direction={'row'}
+        justifyContent={'space-evenly'}
+      >
+        <Button
+          variant='contained'
+          onClick={handlePrev}
+        >
+          Prev
+        </Button>
+        <Button
+          variant='outlined'
+        >
+          {currPage}
+        </Button>
+        <Button
+          variant='contained'
+          onClick={handleNext}
+        >
+          Next
+        </Button>
+      </Stack>
     </Stack>
   </Box>
  )
