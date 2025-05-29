@@ -38,7 +38,13 @@ function App() {
     setTodoList(prevTodo);
   },[])
 
+  useEffect(() => {
+    if(totalPages < currPage && currPage > 1){
+      setCurrPage((prev) => prev - 1);
+    }
+  },[totalPages,currPage])
 
+  
   const handleAdd = () =>{
     if(input.trim() !== ''){
       const newItem = {
@@ -94,15 +100,19 @@ function App() {
         Add
       </Button>
 
-      {currList.length > 0 ? (
-        currList.map((item) => (
-          <Card item={item} handleDelete={handleDelete}/>
-        ))
-      ) : (
-        <Typography variant='h2' component={'h2'}>
-          All Items Completed !!
+      {todoList.length === 0 ? (
+        <Typography 
+          variant='h4'
+          component={'h4'}
+        >
+          No ToDo's Add one 
         </Typography>
-      )}
+      ) : (
+        currList.length > 0 ? (
+        currList.map((item) => (
+          <Card item={item} handleDelete={handleDelete} key={item.id}/>
+        ))
+      ) : null )}
 
       <Stack
         direction={'row'}

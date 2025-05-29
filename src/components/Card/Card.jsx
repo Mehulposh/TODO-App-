@@ -21,6 +21,9 @@ function Card({item,handleDelete}){
             </Typography>
             <DeleteIcon 
                 onClick = {() => handleDelete(item.id)}
+                sx={{
+                    cursor: 'pointer',
+                }}
             />
         </Stack>
     )
